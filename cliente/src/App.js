@@ -6,6 +6,8 @@ import TarefaList from "./components/tarefas/TarefaList";
 import TarefaForm from "./components/tarefas/TarefaForm";
 import PostagemForm from "./components/Postagens/PostagemForm";
 import PostagemList from "./components/Postagens/PostagemList";
+import FotoForm from "./components/Fotos/FotoForm";
+import FotoList from "./components/Fotos/FotoList";
 
 function App() {
     return (
@@ -20,8 +22,8 @@ function App() {
                     <Route path="/usuarios/form" element={<UsuarioForm />} />
                     <Route path="/postagens" element={<PostagemList />} />
                     <Route path="/postagens/form" element={<PostagemForm />} />
-                    <Route path="/foto" element={<PostagemList />} />
-                    <Route path="/postagens/form" element={<PostagemForm />} />
+                    <Route path="/fotos" element={<FotoList />} />
+                    <Route path="/fotos/form" element={<FotoForm />} />
                 </Routes>
             </div>
         </Router>
