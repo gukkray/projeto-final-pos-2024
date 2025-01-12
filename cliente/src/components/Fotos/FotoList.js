@@ -4,7 +4,7 @@ import { fetchData, deleteData } from "../../api";
 const FotoList = () => {
     const [fotos, setFotos] = useState([]);
 
-    // Buscar as fotos ao carregar o componente
+    // Buscar as fotos ao carregar 
     useEffect(() => {
         fetchData("fotos")
             .then((data) => setFotos(data))
@@ -13,7 +13,7 @@ const FotoList = () => {
             });
     }, []);
 
-    // Função para excluir uma foto
+    // excluir uma foto
     const handleDelete = (id) => {
         deleteData("fotos", id)
             .then(() => {

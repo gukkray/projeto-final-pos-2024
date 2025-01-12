@@ -4,7 +4,7 @@ import { fetchData, deleteData } from "../../api";
 const PostagemList = () => {
     const [postagens, setPostagens] = useState([]);
 
-    // Busca as postagens ao carregar o componente
+    // Busca as postagens ao carregar 
     useEffect(() => {
         fetchData("postagens")
             .then((data) => setPostagens(data))
@@ -13,7 +13,7 @@ const PostagemList = () => {
             });
     }, []);
 
-    // Função para excluir uma postagem
+    // excluir uma postagem
     const handleDelete = (id) => {
         deleteData("postagens", id)
             .then(() => {

@@ -29,7 +29,7 @@ const PostagemForm = () => {
         <form onSubmit={handleSubmit}>
             <h2>Criar Postagem</h2>
 
-            {/* Campo para o título da postagem */}
+            {/*  título da postagem */}
             <input
                 type="text"
                 placeholder="Título da Postagem"
@@ -38,7 +38,7 @@ const PostagemForm = () => {
                 required
             />
 
-            {/* Caixa de texto para o conteúdo da postagem */}
+            {/* conteúdo da postagem */}
             <textarea
                 placeholder="Conteúdo da Postagem"
                 value={conteudo}
@@ -46,7 +46,7 @@ const PostagemForm = () => {
                 required
             />
 
-            {/* Seleção de usuário responsável pela postagem */}
+            {/* usuário responsável pela postagem */}
             <select
                 value={usuarioId}
                 onChange={(e) => setUsuarioId(e.target.value)}

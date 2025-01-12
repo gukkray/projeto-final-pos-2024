@@ -9,7 +9,7 @@ const FotoForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Criar a foto com título, URL e miniatura
+        // Cria a foto com título, URL e miniatura
         createData("fotos", { titulo, url, url_miniatura: urlMiniatura, album }).then((newFoto) => {
             console.log("Foto criada:", newFoto);
         }).catch((error) => {
@@ -21,7 +21,7 @@ const FotoForm = () => {
         <form onSubmit={handleSubmit}>
             <h2>Criar Foto</h2>
 
-            {/* Campo para título da foto */}
+            {/* título da foto */}
             <input
                 type="text"
                 placeholder="Título da Foto"
@@ -30,7 +30,7 @@ const FotoForm = () => {
                 required
             />
 
-            {/* Campo para URL da foto */}
+            {/* URL da foto */}
             <input
                 type="url"
                 placeholder="URL da Foto"
@@ -39,7 +39,7 @@ const FotoForm = () => {
                 required
             />
 
-            {/* Campo para URL da miniatura */}
+            {/*  URL da miniatura */}
             <input
                 type="url"
                 placeholder="URL da Miniatura"
@@ -48,7 +48,7 @@ const FotoForm = () => {
                 required
             />
 
-            {/* Campo para selecionar o álbum */}
+            {/*  selecionar o álbum */}
             <input
                 type="text"
                 placeholder="Álbum"

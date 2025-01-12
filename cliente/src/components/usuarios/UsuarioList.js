@@ -4,7 +4,7 @@ import { fetchData, deleteData } from "../../api";
 const UsuarioList = () => {
     const [usuarios, setUsuarios] = useState([]);
 
-    // Busca os usuários ao carregar o componente
+    // Busca os usuários ao carregar 
     useEffect(() => {
         fetchData("usuarios")
             .then(setUsuarios)
@@ -13,7 +13,7 @@ const UsuarioList = () => {
             });
     }, []);
 
-    // Função para excluir um usuário
+    //  excluir um usuário
     const handleDelete = (id) => {
         deleteData("usuarios", id)
             .then(() => {
