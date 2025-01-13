@@ -13,13 +13,14 @@ class TarefaSerializer(serializers.ModelSerializer):
 
 class PostagemSerializer(serializers.ModelSerializer):
     class Meta:
+        usuario_nome = serializers.CharField(source='usuario.nome', read_only=True)
         model = Postagem
         fields = '__all__'
 
 class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comentario
-        fields = '__all__'
+        fields = ['id', 'postagem', 'nome', 'email', 'conteudo']
 
 class AlbumSerializer(serializers.ModelSerializer):
     class Meta:

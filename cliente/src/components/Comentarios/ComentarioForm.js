@@ -8,7 +8,6 @@ const ComentarioForm = () => {
     const [conteudo, setConteudo] = useState("");
     const [postagens, setPostagens] = useState([]);
 
-    // Carrega as postagens disponíveis ao montar o componente
     useEffect(() => {
         fetchData("postagens")
             .then(setPostagens)
@@ -19,15 +18,18 @@ const ComentarioForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Criar comentário com os dados fornecidos
-        createData("comentarios", {
-            postagem_id: postagemId,
+        const payload = {
+            postagem: postagemId,
             nome,
             email,
             conteudo
-        })
+        };
+        console.log("Enviando os seguintes dados:", payload);
+
+        createData("comentarios", payload)
             .then((novoComentario) => {
                 console.log("Comentário criado:", novoComentario);
+                alert("Comentário adicionado com sucesso!");
             })
             .catch((error) => {
                 console.error("Erro ao criar comentário:", error);
@@ -38,7 +40,6 @@ const ComentarioForm = () => {
         <form onSubmit={handleSubmit}>
             <h2>Adicionar Comentário</h2>
 
-            {/* Seleção da postagem */}
             <select
                 value={postagemId}
                 onChange={(e) => setPostagemId(e.target.value)}
@@ -52,7 +53,6 @@ const ComentarioForm = () => {
                 ))}
             </select>
 
-            {/* nome do autor do comentário */}
             <input
                 type="text"
                 placeholder="Seu Nome"
@@ -61,7 +61,6 @@ const ComentarioForm = () => {
                 required
             />
 
-            {/* e-mail do autor do comentário */}
             <input
                 type="email"
                 placeholder="Seu E-mail"
@@ -70,7 +69,6 @@ const ComentarioForm = () => {
                 required
             />
 
-            {/* conteúdo do comentário */}
             <textarea
                 placeholder="Seu Comentário"
                 value={conteudo}

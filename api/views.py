@@ -15,11 +15,11 @@ class TarefaViewSet(viewsets.ModelViewSet):
     serializer_class = TarefaSerializer
 
 class PostagemViewSet(viewsets.ModelViewSet):
-    queryset = Postagem.objects.all()
+    queryset = Postagem.objects.select_related('usuario').all()
     serializer_class = PostagemSerializer
 
 class ComentarioViewSet(viewsets.ModelViewSet):
-    queryset = Comentario.objects.all()
+    queryset = Comentario.objects.select_related('postagem').all()
     serializer_class = ComentarioSerializer
 
 class AlbumViewSet(viewsets.ModelViewSet):

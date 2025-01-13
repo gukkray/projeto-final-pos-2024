@@ -7,29 +7,26 @@ const PostagemForm = () => {
     const [usuarioId, setUsuarioId] = useState("");
     const [usuarios, setUsuarios] = useState([]);
 
-    // Carregar usuários ao carregar o formulário
     useEffect(() => {
         fetchData("usuarios")
             .then(setUsuarios)
-            .catch((error) => {
-                console.error("Error fetching usuarios:", error);
-            });
+            .catch((error) => console.error("Erro ao buscar usuários:", error));
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        createData("postagens", { titulo, conteudo, usuario_id: usuarioId }).then((newPostagem) => {
-            console.log("Postagem criada:", newPostagem);
-        }).catch((error) => {
-            console.error("Error criando postagem:", error);
-        });
+        createData("postagens", { titulo, conteudo, usuario: usuarioId })
+            .then((newPostagem) => {
+                console.log("Postagem criada:", newPostagem);
+            })
+            .catch((error) => {
+                console.error("Erro ao criar postagem:", error);
+            });
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <h2>Criar Postagem</h2>
-
-            {/*  título da postagem */}
             <input
                 type="text"
                 placeholder="Título da Postagem"
@@ -37,16 +34,12 @@ const PostagemForm = () => {
                 onChange={(e) => setTitulo(e.target.value)}
                 required
             />
-
-            {/* conteúdo da postagem */}
             <textarea
                 placeholder="Conteúdo da Postagem"
                 value={conteudo}
                 onChange={(e) => setConteudo(e.target.value)}
                 required
             />
-
-            {/* usuário responsável pela postagem */}
             <select
                 value={usuarioId}
                 onChange={(e) => setUsuarioId(e.target.value)}
@@ -59,7 +52,6 @@ const PostagemForm = () => {
                     </option>
                 ))}
             </select>
-
             <button type="submit">Criar Postagem</button>
         </form>
     );

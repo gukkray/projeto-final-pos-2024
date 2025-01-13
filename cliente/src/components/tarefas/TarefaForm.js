@@ -1,93 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
 
-const TarefasForm = () => {
-  const [titulo, setTitulo] = useState('');
-  const [usuarioId, setUsuarioId] = useState('');
-  const [concluido, setConcluido] = useState(false);
+const TarefaForm = () => {
   const [usuarios, setUsuarios] = useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const [usuario, setUsuario] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [concluido, setConcluido] = useState(false);
+  const [mensagem, setMensagem] = useState("");
 
-  // Carregar usuários ao carregar o formulário
+  // Busca usuários ao carregar o componente
   useEffect(() => {
-    axios.get('/api/usuarios/')  // Endpoint para buscar os usuários
-      .then(response => {
-        setUsuarios(response.data);  // Atualiza o estado com os usuários
-      })
-      .catch(error => {
-        console.error('Erro ao carregar usuários:', error);
+    const fetchUsuarios = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/usuarios/");
+        if (response.ok) {
+          const data = await response.json();
+          setUsuarios(data);
+        } else {
+          setMensagem("Erro ao carregar os usuários.");
+        }
+      } catch (error) {
+        setMensagem("Erro na comunicação com a API.");
+      }
+    };
+    fetchUsuarios();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/tarefas/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ usuario, titulo, concluido }),
       });
 
-    // Carregar tarefa se houver o id (edição)
-    if (id) {
-      axios.get(`/api/tarefas/${id}/`)
-        .then(response => {
-          setTitulo(response.data.titulo);
-          setUsuarioId(response.data.usuario.id);  // Supondo que a resposta tenha o id do usuário
-          setConcluido(response.data.concluido);
-        })
-        .catch(error => {
-          console.error('Erro ao carregar tarefa:', error);
-        });
+      if (response.ok) {
+        setMensagem("Tarefa adicionada com sucesso!");
+        setTitulo("");
+        setConcluido(false);
+        setUsuario("");
+      } else {
+        const erro = await response.json();
+        setMensagem(`Erro: ${erro.detail || "Não foi possível adicionar a tarefa."}`);
+      }
+    } catch (error) {
+      setMensagem("Erro na comunicação com a API.");
     }
-  }, [id]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const payload = { titulo, usuario_id: usuarioId, concluido };
-
-    const request = id
-      ? axios.put(`/api/tarefas/${id}/`, payload)
-      : axios.post('/api/tarefas/', payload);
-
-    request
-      .then(() => navigate('/tarefas'))
-      .catch(error => console.error('Erro ao salvar tarefa:', error));
   };
 
   return (
     <div>
-      <h1>{id ? 'Editar Tarefa' : 'Nova Tarefa'}</h1>
+      <h1>Adicionar Nova Tarefa</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Título</label>
+        <label>
+          Usuário:
+          <select value={usuario} onChange={(e) => setUsuario(e.target.value)} required>
+            <option value="">Selecione um usuário</option>
+            {usuarios.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.nome}
+              </option>
+            ))}
+          </select>
+        </label>
+        <br />
+        <label>
+          Título:
           <input
             type="text"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label>Usuário</label>
-          <select
-            value={usuarioId}
-            onChange={(e) => setUsuarioId(e.target.value)}
-            required
-          >
-            <option value="">Selecione o Usuário</option>
-            {usuarios.map((usuario) => (
-              <option key={usuario.id} value={usuario.id}>
-                {usuario.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>Concluído</label>
+        </label>
+        <br />
+        <label>
+          Concluído:
           <input
             type="checkbox"
             checked={concluido}
             onChange={(e) => setConcluido(e.target.checked)}
           />
-        </div>
+        </label>
+        <br />
         <button type="submit">Salvar</button>
-        <button type="button" onClick={() => navigate('/tarefas')}>Cancelar</button>
       </form>
+      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 };
 
-export default TarefasForm;
+export default TarefaForm;

@@ -17,6 +17,16 @@ const AlbumForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+         // Validação dos campos
+    if (!usuarioId || !titulo) {
+        console.error("Por favor, preencha todos os campos.");
+        return; // Não enviar a requisição se algum campo estiver vazio
+    }
+        
+        // Verifique o valor do usuarioId e titulo antes de enviar
+        console.log("Dados enviados para criar álbum:", { titulo, usuario_id: usuarioId });
+    
         // Criar álbum com título e usuário responsável
         createData("albuns", { titulo, usuario_id: usuarioId })
             .then((novoAlbum) => {
