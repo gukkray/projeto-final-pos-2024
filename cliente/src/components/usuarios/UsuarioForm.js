@@ -14,7 +14,8 @@ const UsuarioForm = () => {
         setSuccess("");
         setError("");
 
-        createData("usuarios", { nome: name, email })
+        createData("usuarios", { nome: name, email, nome_usuario: email.split('@')[0] })
+
             .then(() => {
                 setSuccess("Usuário criado com sucesso!");
                 setTimeout(() => navigate("/usuarios"), 1000); // Redireciona após 1s
