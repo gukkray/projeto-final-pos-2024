@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createData, fetchData } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const ComentarioForm = () => {
     const [postagemId, setPostagemId] = useState("");
@@ -7,6 +8,8 @@ const ComentarioForm = () => {
     const [email, setEmail] = useState("");
     const [conteudo, setConteudo] = useState("");
     const [postagens, setPostagens] = useState([]);
+    const [mensagem, setMensagem] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchData("postagens")
@@ -22,62 +25,135 @@ const ComentarioForm = () => {
             postagem: postagemId,
             nome,
             email,
-            conteudo
+            conteudo,
         };
-        console.log("Enviando os seguintes dados:", payload);
-
         createData("comentarios", payload)
-            .then((novoComentario) => {
-                console.log("Comentário criado:", novoComentario);
-                alert("Comentário adicionado com sucesso!");
+            .then(() => {
+                setMensagem("Comentário adicionado com sucesso!");
+                setNome("");
+                setEmail("");
+                setConteudo("");
+                setPostagemId("");
+                setTimeout(() => navigate("/comentarios"), 1000); // Redireciona após 1s
             })
             .catch((error) => {
                 console.error("Erro ao criar comentário:", error);
+                setMensagem("Erro ao adicionar comentário.");
             });
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Adicionar Comentário</h2>
-
-            <select
-                value={postagemId}
-                onChange={(e) => setPostagemId(e.target.value)}
-                required
+        <div style={{ maxWidth: "500px", margin: "20px auto", fontFamily: "Arial, sans-serif" }}>
+            <form
+                onSubmit={handleSubmit}
+                style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    padding: "20px",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                }}
             >
-                <option value="">Selecione a Postagem</option>
-                {postagens.map((postagem) => (
-                    <option key={postagem.id} value={postagem.id}>
-                        {postagem.titulo}
-                    </option>
-                ))}
-            </select>
+                <h2 style={{ textAlign: "center", color: "#333" }}>Adicionar Comentário</h2>
+                {mensagem && <p style={{ color: "green", textAlign: "center" }}>{mensagem}</p>}
 
-            <input
-                type="text"
-                placeholder="Seu Nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-            />
+                <div style={{ marginBottom: "15px" }}>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                        Selecione a Postagem
+                    </label>
+                    <select
+                        value={postagemId}
+                        onChange={(e) => setPostagemId(e.target.value)}
+                        required
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid #ccc",
+                        }}
+                    >
+                        <option value="">Selecione a Postagem</option>
+                        {postagens.map((postagem) => (
+                            <option key={postagem.id} value={postagem.id}>
+                                {postagem.titulo}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-            <input
-                type="email"
-                placeholder="Seu E-mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
+                <div style={{ marginBottom: "15px" }}>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                        Seu Nome
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="Digite seu nome"
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid #ccc",
+                        }}
+                        required
+                    />
+                </div>
 
-            <textarea
-                placeholder="Seu Comentário"
-                value={conteudo}
-                onChange={(e) => setConteudo(e.target.value)}
-                required
-            />
+                <div style={{ marginBottom: "15px" }}>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                        Seu E-mail
+                    </label>
+                    <input
+                        type="email"
+                        placeholder="Digite seu e-mail"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid #ccc",
+                        }}
+                        required
+                    />
+                </div>
 
-            <button type="submit">Adicionar Comentário</button>
-        </form>
+                <div style={{ marginBottom: "15px" }}>
+                    <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
+                        Seu Comentário
+                    </label>
+                    <textarea
+                        placeholder="Digite seu comentário"
+                        value={conteudo}
+                        onChange={(e) => setConteudo(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid #ccc",
+                            minHeight: "100px",
+                        }}
+                        required
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        backgroundColor: "#4CAF50",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                    }}
+                >
+                    Adicionar Comentário
+                </button>
+            </form>
+        </div>
     );
 };
 

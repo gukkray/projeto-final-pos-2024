@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchData, deleteData } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const ComentarioList = () => {
     const [comentarios, setComentarios] = useState([]);
+    const navigate = useNavigate();
 
-    // Busca os comentários ao carregar 
     useEffect(() => {
         fetchData("comentarios")
             .then(setComentarios)
@@ -13,7 +14,6 @@ const ComentarioList = () => {
             });
     }, []);
 
-    //  excluir comentário
     const handleDelete = (id) => {
         deleteData("comentarios", id)
             .then(() => {
@@ -26,18 +26,57 @@ const ComentarioList = () => {
 
     return (
         <div>
-            <h1>Comentários</h1>
+            <h1 style={{ textAlign: "center", color: "#333" }}>Comentários</h1>
+            <button
+                onClick={() => navigate("/comentarios/form")}
+                style={{
+                    padding: "10px",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "block",
+                    margin: "20px auto",
+                }}
+            >
+                Novo Comentário
+            </button>
             {comentarios.length === 0 ? (
-                <p>Não há comentários registrados.</p>
+                <p style={{ textAlign: "center" }}>Não há comentários registrados.</p>
             ) : (
-                <ul>
+                <ul style={{ listStyleType: "none", padding: 0 }}>
                     {comentarios.map((comentario) => (
-                        <li key={comentario.id}>
+                        <li
+                            key={comentario.id}
+                            style={{
+                                border: "1px solid #ccc",
+                                padding: "20px",
+                                marginBottom: "15px",
+                                borderRadius: "8px",
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
                             <p><strong>Nome:</strong> {comentario.nome}</p>
                             <p><strong>E-mail:</strong> {comentario.email}</p>
                             <p><strong>Comentário:</strong> {comentario.conteudo}</p>
                             <p><strong>Postagem:</strong> {comentario.postagem_titulo}</p>
-                            <button onClick={() => handleDelete(comentario.id)}>Excluir</button>
+                            <button
+                                onClick={() => handleDelete(comentario.id)}
+                                style={{
+                                    padding: "10px",
+                                    backgroundColor: "#FF6347",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                    marginTop: "10px",
+                                }}
+                            >
+                                Excluir
+                            </button>
                         </li>
                     ))}
                 </ul>

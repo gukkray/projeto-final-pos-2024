@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchData, deleteData } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const AlbumList = () => {
     const [albuns, setAlbuns] = useState([]);
+    const navigate = useNavigate();
 
-    // Busca álbuns ao carregar
     useEffect(() => {
         fetchData("albuns")
             .then(setAlbuns)
@@ -13,7 +14,6 @@ const AlbumList = () => {
             });
     }, []);
 
-    //  excluir um álbum
     const handleDelete = (id) => {
         deleteData("albuns", id)
             .then(() => {
@@ -26,16 +26,55 @@ const AlbumList = () => {
 
     return (
         <div>
-            <h1>Álbuns</h1>
+            <h1 style={{ textAlign: "center", color: "#333" }}>Álbuns</h1>
+            <button
+                onClick={() => navigate("/albuns/form")}
+                style={{
+                    padding: "10px",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    display: "block",
+                    margin: "20px auto",
+                }}
+            >
+                Novo Álbum
+            </button>
             {albuns.length === 0 ? (
-                <p>Não há álbuns registrados.</p>
+                <p style={{ textAlign: "center" }}>Não há álbuns registrados.</p>
             ) : (
-                <ul>
+                <ul style={{ listStyleType: "none", padding: 0 }}>
                     {albuns.map((album) => (
-                        <li key={album.id}>
+                        <li
+                            key={album.id}
+                            style={{
+                                border: "1px solid #ccc",
+                                padding: "20px",
+                                marginBottom: "15px",
+                                borderRadius: "8px",
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
                             <p><strong>Título:</strong> {album.titulo}</p>
                             <p><strong>Usuário:</strong> {album.usuario_nome}</p>
-                            <button onClick={() => handleDelete(album.id)}>Excluir</button>
+                            <button
+                                onClick={() => handleDelete(album.id)}
+                                style={{
+                                    padding: "10px",
+                                    backgroundColor: "#FF6347",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                    marginTop: "10px",
+                                }}
+                            >
+                                Excluir
+                            </button>
                         </li>
                     ))}
                 </ul>
